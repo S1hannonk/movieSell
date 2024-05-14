@@ -1,0 +1,83 @@
+#中间件部署的ip地址
+middleware:
+  ip: "你的中间件部署位置"
+
+spring:
+  #数据库配置
+  datasource:
+    #jdbc驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #URL路径
+    url: jdbc:mysql://${middleware.ip}:3306/movie_sell?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    #用户名
+    username: "mysql账户名称"
+    #密码
+    password: "mysql密码"
+    #获取Connection链接对象类签名
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#redis 配置
+  redis:
+    #redis部署地址
+    host: ${middleware.ip}
+    #监听端口
+    port: 6379
+    #密码
+#    password:
+      #redisson配置信息
+    redisson:
+      #单节点配置
+      singleServerConfig:
+        #节点名称
+        clientName: node-one
+        #节点网络域
+        address: redis://${middleware.ip}:6379
+        #登录密码
+
+# kafka 配置
+  kafka:
+    # kafka 服务节点网络域
+    bootstrap-servers: ${middleware.ip}:9092
+    # 生产者 配置
+    producer:
+      # 重试次数
+      retries: 3
+      # 批量发送数据大小
+      batch-size: 16384
+      # 缓冲数据大小
+      buffer-memory: 33554432
+      # 回执数
+      acks: 1
+      # key数据 对象序列化 类签名
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # value数据 对象序列化 类签名
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    # 消费者 配置
+    consumer:
+      # 消费者分组id
+      group-id: group-01
+      # 启用自动提交回执
+      enable-auto-commit: false
+      # 重置消费队列指针策略
+      auto-offset-reset: earliest
+      # key数据 对象反序列化 类签名
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # value数据 对象反序列化 类签名
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 队列池中的最大记录数
+      max-poll-records: 500
+    # 监听器 配置
+    listener:
+      # 回执模式：手动回执模式
+      ack-mode: MANUAL_IMMEDIATE
+
+
+
+
+#mybatis配置
+mybatis-plus:
+  #映射路径
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+
+

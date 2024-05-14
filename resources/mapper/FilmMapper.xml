@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.rog/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="movieSell.mapper.FilmMapper">
+    <select id="selectListByTypeId" resultType="movieSell.bean.po.Film">
+        select a.*
+        from
+            `film` a
+            inner join `type_film_rel` b on a.`film_id` = b.`film_id`
+        where
+            b.`type_id` = #{typeId}
+        limit
+            0,8
+    </select>
+
+    <select id="selectCountByTypeID" resultType="java.lang.Integer">
+        select count(`film_id`)
+        from
+            `type_film_rel`
+        where
+        `type_id` = #{typeId}
+    </select>
+<!--    #为接值 $为拼接对象-->
+    <select id="selectListOrderBy" resultType="movieSell.bean.po.Film">
+        select *
+        from
+            `film`
+        order by
+            ${oderColumn} desc
+        limit
+            0,10
+    </select>
+
+</mapper>
